@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
-use Auth;
-use Validate;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller as controller;
 
 class BaseController extends Controller

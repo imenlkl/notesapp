@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+
 use Illuminate\Http\Request;
 use App\Models\Note;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Note as NoteResource;
 use App\Http\Controllers\API\BaseController as BaseController;
+
 
 class NoteController extends BaseController
 {
@@ -17,10 +19,8 @@ class NoteController extends BaseController
      */
     public function index()
     {
-        $notes = Note::all();
-
-        return $this->sendResponse(NoteResource::collection($notes),
-        'All notes sent');
+        $note = Note::all();
+        return $this->sendResponse(NoteResource::collection($note), 'All notes sent');
     }
 
     public function store(Request $request)
@@ -44,10 +44,10 @@ class NoteController extends BaseController
     {
         $note = Note::find($id);
         if (is_null($note)) {
-            return $this->sendError('Note not found', $validator->errors());
+            return $this->sendError('Note not found');
         }
 
-        return $this->sendResponse(new NoteResource($note), 'Note created successfully');
+        return $this->sendResponse(new NoteResource($note), 'Note found successfully');
     }
 
     public function update(Request $request, Note $note)
@@ -64,13 +64,14 @@ class NoteController extends BaseController
 
         $note->title = $input['title'];
         $note->content = $input['content'];
-
+        $note->save();
         return $this->sendResponse(new NoteResource($note), 'Note updated successfully');
     }
 
     public function destroy(Note $note)
     {
         $note->delete();
+
         return $this->sendResponse(new NoteResource($note), 'Note deleted successfully');
     }
 }
