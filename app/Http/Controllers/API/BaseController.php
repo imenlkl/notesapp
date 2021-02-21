@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as controller;
 
 class BaseController extends Controller
@@ -11,7 +12,7 @@ class BaseController extends Controller
         $response = [
             'success' => true,
             'data' => $result,
-            'message' => $message,
+            'message' => $message
         ];
 
         return response()->json($response, 200);
@@ -21,7 +22,7 @@ class BaseController extends Controller
     {
         $response = [
             'success' => false,
-            'data' => $error,
+            'message' => $error
         ];
         if (!empty($errorMessage)) {
             $response['data'] = $errorMessage;

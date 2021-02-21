@@ -34,6 +34,7 @@ class RegisterController extends BaseController
 
         return $this->sendResponse($success, 'user registred successfully');
     }
+    
 
     public function login(Request $request)
     {

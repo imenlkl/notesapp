@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Controllers\RegisterController;
-use App\controllers\NoteController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +23,5 @@ Route::post('login', 'API\RegisterController@login');
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('notes', 'API\NoteController');
+    Route::get('notes/user/{id}', 'NoteController@userNotes');
 });

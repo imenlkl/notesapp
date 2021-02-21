@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers\API;
 
-
-use Illuminate\Http\Request;
-use App\Models\Note;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Note as NoteResource;
 use App\Http\Controllers\API\BaseController as BaseController;
-
+use App\Http\Resources\Note as NoteResource;
+use App\Models\Note;
+use Illuminate\Contract\
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class NoteController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $note = Note::all();
-        return $this->sendResponse(NoteResource::collection($note), 'All notes sent');
+
+        return $this->sendResponse(NoteResource::collection($note), 'Note recieved successfully');
     }
+
+    public function userNotes($id)
+    {
+        $note = Note::where('user_id', $id)->get();
+
+        return $this->sendResponse(NoteResource::collection($note), 'Note recieved successfully');
+    }
+
 
     public function store(Request $request)
     {
@@ -35,9 +39,10 @@ class NoteController extends BaseController
             return $this->sendError('Please validate error', $validator->errors());
         }
 
+        $user = Auth::user();
+        $input['user_id'] = $user->id;
         $note = Note::create($input);
-
-        return $this->sendResponse(new NoteResource($note), 'Note created successfully');
+        return $this->sendResponse( $note, 'Note created successfully');
     }
 
     public function show($id)
@@ -65,6 +70,7 @@ class NoteController extends BaseController
         $note->title = $input['title'];
         $note->content = $input['content'];
         $note->save();
+
         return $this->sendResponse(new NoteResource($note), 'Note updated successfully');
     }
 
